@@ -20,7 +20,7 @@ const SubmitButton: FC<Props> = ({
     ? "Message sent successfully"
     : fail
     ? "Message failed to be sent"
-    : "Send message";
+    : "Verify";
   return (
     <>
       {!loading ? (

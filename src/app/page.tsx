@@ -3,26 +3,25 @@ import SubmitButton from "@/components/SubmitButton";
 import { useState } from "react";
 
 export default function Home() {
-  const [message, setMessage] = useState("");
+  const [url, setURL] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSucess] = useState(false);
   const [fail, setFail] = useState(false);
 
-  const sendMessage = async () => {
+  const sendurl = async () => {
     try {
       setLoading(true);
-      const res = await fetch("https://www.hackercoop.dev/api/boop", {
+      const res = await fetch("http://localhost:8000/api/predict/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer HackerSummer2023",
         },
         body: JSON.stringify({
-          content: `**Message from ultorw**: ${message} `,
+          url,
         }),
       });
       setSucess(true);
-      setMessage("");
+      setURL("");
     } catch (error) {
       setFail(true);
       console.log(error);
@@ -38,23 +37,23 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col justify-center items-center">
       <div className="flex flex-col gap-24">
-        <h1 className="text-6xl font-extrabold">Homework</h1>
+        <h1 className="text-6xl font-extrabold">Is it phishing or legit?</h1>
         <div className="flex flex-col gap-4 text-4xl">
-          <label htmlFor="message">Enter a message</label>
+          <label htmlFor="url">Enter a valid URL to find out</label>
           <input
-            value={message}
+            value={url}
             onChange={(e) => {
-              setMessage(e.target.value);
+              setURL(e.target.value);
             }}
-            name="message"
+            name="url"
             className="p-2 text-3xl focus:outline-none text-slate-800 rounded-sm"
             type="text"
-            placeholder="Hello discord!"
+            placeholder="https://google.com"
           />
           <SubmitButton
-            disabled={!message || success || fail}
+            disabled={!url || success || fail}
             loading={loading}
-            onClick={sendMessage}
+            onClick={sendurl}
             success={success}
             fail={fail}
           />
@@ -70,10 +69,6 @@ export default function Home() {
           >
             danielserranog1
           </a>
-        </p>
-        <p>
-          <span className="font-light italic">discord</span>:{" "}
-          <span className="font-bold">ultorw</span>
         </p>
       </footer>
     </main>
