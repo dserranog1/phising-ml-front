@@ -3,29 +3,19 @@ import Spinner from "./Spinner";
 
 interface Props {
   onClick: () => {};
-  disabled: boolean;
   loading: boolean;
-  success: boolean;
-  fail: boolean;
 }
 
 const SubmitButton: FC<Props> = ({
   onClick,
-  disabled,
-  success,
-  fail,
   loading,
 }) => {
-  const buttonLabel = success
-    ? "Message sent successfully"
-    : fail
-    ? "Message failed to be sent"
-    : "Verify";
+  const buttonLabel = "Verify"
   return (
     <>
       {!loading ? (
         <button
-          disabled={disabled}
+          disabled={loading}
           onClick={onClick}
           className="bg-blue-600 hover:bg-blue-500 text-2xl p-1 border-1 rounded-sm disabled:cursor-not-allowed disabled:bg-blue-600"
         >

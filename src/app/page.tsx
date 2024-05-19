@@ -20,17 +20,24 @@ export default function Home() {
           url,
         }),
       });
-      setSucess(true);
-      setURL("");
+      if (res.status >= 400) {
+        const err = await res.text()
+        if (err.startsWith('Invalid URL')) {
+          //toggle error board
+      }
+      } else if (res.status == 200) {
+        // toggle success board
+        setSucess(true);
+      } else {
+        //TODO: handle this case
+        console.log("Unknown response", res.status);
+      }
     } catch (error) {
-      setFail(true);
+      // toggle unknown error
       console.log(error);
     } finally {
-      setTimeout(() => {
-        setSucess(false);
-        setFail(false);
-      }, 3000);
-      setLoading(false);
+      setURL("");
+      setLoading(false)
     }
   };
 
@@ -51,11 +58,8 @@ export default function Home() {
             placeholder="https://google.com"
           />
           <SubmitButton
-            disabled={!url || success || fail}
             loading={loading}
             onClick={sendurl}
-            success={success}
-            fail={fail}
           />
         </div>
       </div>
