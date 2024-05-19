@@ -1,5 +1,8 @@
 "use client";
+import FailedRequest from "@/components/FailedRequest";
 import SubmitButton from "@/components/SubmitButton";
+import SuccessfulRequest from "@/components/SuccessfulRequest";
+import { Prediction } from "@/types";
 import { useState } from "react";
 
 export default function Home() {
@@ -7,6 +10,9 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [success, setSucess] = useState(false);
   const [fail, setFail] = useState(false);
+  const [errMessage, setErrMessage] = useState<undefined | string>(undefined)
+  const [errCode, setErrCode] = useState<number>(0)
+  const [data, setData] = useState<null | Prediction>(null)
 
   const sendurl = async () => {
     try {
@@ -23,10 +29,15 @@ export default function Home() {
       if (res.status >= 400) {
         const err = await res.text()
         if (err.startsWith('Invalid URL')) {
-          //toggle error board
-      }
+          setErrMessage(err)
+        } else {
+          setErrMessage(undefined)
+        }
+        setErrCode(res.status)
+        setFail(true)
       } else if (res.status == 200) {
         // toggle success board
+        setData( await res.json() as Prediction)
         setSucess(true);
       } else {
         //TODO: handle this case
@@ -43,7 +54,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col justify-center items-center">
-      <div className="flex flex-col gap-24">
+      <div className="flex flex-col gap-24 mb-32">
         <h1 className="text-6xl font-extrabold">Is it phishing or legit?</h1>
         <div className="flex flex-col gap-4 text-4xl">
           <label htmlFor="url">Enter a valid URL to find out</label>
@@ -57,12 +68,11 @@ export default function Home() {
             type="text"
             placeholder="https://google.com"
           />
-          <SubmitButton
-            loading={loading}
-            onClick={sendurl}
-          />
+          <SubmitButton loading={loading} onClick={sendurl} />
         </div>
       </div>
+      {success && <SuccessfulRequest data={data} />}
+      {fail && <FailedRequest message={errMessage} code={errCode} />}
       <footer className="mt-48">
         <p>
           <span className="font-light italic">github:</span>{" "}
