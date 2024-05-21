@@ -15,9 +15,11 @@ export default function Home() {
   const [data, setData] = useState<null | Prediction>(null)
 
   const sendurl = async () => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    console.log(apiUrl)
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:8000/api/predict/", {
+      const res = await fetch(`${apiUrl}/api/predict/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
