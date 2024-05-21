@@ -35,10 +35,12 @@ export default function Home() {
         }
         setErrCode(res.status)
         setFail(true)
+        setSucess(false)
       } else if (res.status == 200) {
         // toggle success board
         setData( await res.json() as Prediction)
         setSucess(true);
+        setFail(false)
       } else {
         //TODO: handle this case
         console.log("Unknown response", res.status);
@@ -75,13 +77,24 @@ export default function Home() {
       {fail && <FailedRequest message={errMessage} code={errCode} />}
       <footer className="mt-48">
         <p>
-          <span className="font-light italic">github:</span>{" "}
+          <span className="font-light italic">code is open source</span>{" "}
+        </p>
+        <p>
           <a
-            href="https://github.com/dserranog1"
+            href="https://github.com/dserranog1/phising-ml-front"
             target="_blank"
             className="font-bold text-blue-500"
           >
-            danielserranog1
+            frontend
+          </a>
+        </p>
+        <p>
+          <a
+            href="https://github.com/dserranog1/phishing-ml"
+            target="_blank"
+            className="font-bold text-blue-500"
+          >
+            backend
           </a>
         </p>
       </footer>
